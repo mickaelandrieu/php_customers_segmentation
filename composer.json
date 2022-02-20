@@ -1,0 +1,21 @@
+{
+    "name": "mickaelandrieu/php_customers_segmentation",
+    "description": "Customers segmentation of PrestaShop project using unsupervized",
+    "type": "project",
+    "require": {
+        "rubix/ml": "^1.3",
+        "symfony/var-dumper": "^6.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Am\\CustomerSegmentation\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mickaël Andrieu",
+            "email": "mickael.andrieu@solvolabs.com"
+        }
+    ]
+}
