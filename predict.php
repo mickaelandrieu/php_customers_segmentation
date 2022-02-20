@@ -19,32 +19,33 @@ use Rubix\ML\PersistentModel;
 use Rubix\ML\Persisters\Filesystem;
 use Rubix\ML\Transformers\NumericStringConverter;
 
+// We use the same dataset (it's a test, not a real ML app)
 $dataset = Unlabeled::fromIterator(new CSV('./data/customers.csv', true))
     ->apply(new NumericStringConverter())
 ;
+
+$variables = [
+    'id_customer',
+    'recency',
+    'monetary',
+    'frequency',
+];
 
 $kmeans = PersistentModel::load(new Filesystem('./models/customers_clustering.rbx'));
 
 $predictions = $kmeans->predict($dataset);
 
-$variables = new ColumnPicker(new CSV('./data/customers.csv', true), [
-    'id_customer',
-    'recency',
-    'monetary',
-    'frequency'
-]);
+// add the predictions variable to the former dataset
+$selection = new ColumnPicker(new CSV('./data/customers.csv', true), $variables);
 
-$ids = array_column(iterator_to_array($variables), 'id_customer');
-$recencies = array_column(iterator_to_array($variables), 'recency');
-$monetary_values = array_column(iterator_to_array($variables), 'monetary');
-$frequencies = array_column(iterator_to_array($variables), 'frequency');
+$valuesPerVariable = [];
 
-array_unshift($ids, 'id_customer');
-array_unshift($recencies, 'recency');
-array_unshift($monetary_values, 'monetary');
-array_unshift($frequencies, 'frequency');
-array_unshift($predictions, 'cluster');
+foreach ($variables as $variable) {
+    $variableValues = array_column(iterator_to_array($selection), $variable);
+    array_unshift($variableValues, $variable);
+    $valuesPerVariable[] = $variableValues;
+}
 
+// For further analysis : plot, statistics, testing...
 $predictionsFile = new CSV('./output/predictions.csv');
-
-$predictionsFile->export(array_map(null, ...[$ids, $predictions, $recencies, $frequencies, $monetary_values]));
+$predictionsFile->export(array_map(null, ...$valuesPerVariable));
