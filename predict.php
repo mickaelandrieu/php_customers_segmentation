@@ -34,8 +34,9 @@ $variables = [
 $kmeans = PersistentModel::load(new Filesystem('./models/customers_clustering.rbx'));
 
 $predictions = $kmeans->predict($dataset);
+array_unshift($predictions, 'cluster');
 
-// add the predictions variable to the former dataset
+// We add the predictions variable to the former dataset
 $selection = new ColumnPicker(new CSV('./data/customers.csv', true), $variables);
 
 $valuesPerVariable = [];
@@ -45,6 +46,9 @@ foreach ($variables as $variable) {
     array_unshift($variableValues, $variable);
     $valuesPerVariable[] = $variableValues;
 }
+
+
+$valuesPerVariable[] = $predictions;
 
 // For further analysis : plot, statistics, testing...
 $predictionsFile = new CSV('./output/predictions.csv');
