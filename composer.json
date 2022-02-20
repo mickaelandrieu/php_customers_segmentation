@@ -7,11 +7,6 @@
         "symfony/var-dumper": "^6.0"
     },
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Am\\CustomerSegmentation\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Mickaël Andrieu",
