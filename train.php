@@ -29,9 +29,10 @@ $dataset = Unlabeled::fromIterator(new CSV('./data/customers.csv', true))
 //dump($dataset->head());
 
 // Scale and center the Data
+// Same behavior than Scikit-Learn StandardScaler()
 $dataset->apply(new ZScaleStandardizer());
 
-// Set up the Machine Learning model
+// Set up the Machine Learning model : MiniBatch KMeans
 // The first argument is the number of clusters we want to create
 
 $kmeans = new PersistentModel(
