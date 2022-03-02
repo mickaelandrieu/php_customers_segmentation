@@ -20,8 +20,15 @@ use Rubix\ML\Persisters\Filesystem;
 use Rubix\ML\Transformers\NumericStringConverter;
 
 // We use the same dataset (it's a test, not a real ML app)
-$dataset = Unlabeled::fromIterator(new CSV('./data/customers.csv', true))
-    ->apply(new NumericStringConverter())
+$dataset = Unlabeled::fromIterator(
+    (new ColumnPicker(
+        new CSV('./data/customers.csv', true), [
+            'recency',
+            'frequency',
+            'monetary',
+        ])
+    )
+)->apply(new NumericStringConverter())
 ;
 
 $variables = [
