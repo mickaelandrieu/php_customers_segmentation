@@ -13,6 +13,7 @@ EOT
 }
 
 use Rubix\ML\Clusterers\KMeans;
+use Rubix\ML\Extractors\ColumnPicker;
 use Rubix\ML\Datasets\Unlabeled;
 use Rubix\ML\Extractors\CSV;
 use Rubix\ML\PersistentModel;
@@ -21,8 +22,15 @@ use Rubix\ML\Transformers\NumericStringConverter;
 use Rubix\ML\Transformers\ZScaleStandardizer;
 
 // Import the Data
-$dataset = Unlabeled::fromIterator(new CSV('./data/customers.csv', true))
-    ->apply(new NumericStringConverter())
+$dataset = Unlabeled::fromIterator(
+    (new ColumnPicker(
+        new CSV('./data/customers.csv', true), [
+            'recency',
+            'frequency',
+            'monetary',
+        ])
+    )
+)->apply(new NumericStringConverter())
 ;
 
 //dump($dataset->describe());
